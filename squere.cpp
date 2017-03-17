@@ -64,5 +64,8 @@ void Squere::changeDescription(int pos, bool state){
         desc.right = !desc.right;
         break;
     }
-    repaint();
+}
+
+bool Squere::getDeskClicked(){
+    return desc.clicked;
 }

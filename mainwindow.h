@@ -19,6 +19,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QGridLayout *lay;
+    int num_row, num_col;
 
 private slots:
     void clickSquere(QString name_obj);

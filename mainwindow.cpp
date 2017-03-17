@@ -17,8 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
     lay->setColumnMinimumWidth(0,SIZE);
     ui->centralWidget->setLayout(lay);
     QRect n = QApplication::screens().first()->availableGeometry();
-    for (int i = 0; i<n.height()/SIZE;i++){
-        for (int j = 0; j<n.width()/SIZE; j++){
+    num_row = n.height()/SIZE;
+    num_col = n.width()/SIZE;
+    for (int i = 0; i<num_row;i++){
+        for (int j = 0; j<num_col; j++){
             Squere *s = new Squere(this);
             s->setObjectName(QString("%1:%2").arg(i).arg(j));
             lay->addWidget(s,i,j,1,1,Qt::AlignCenter);
@@ -39,4 +41,34 @@ void MainWindow::clickSquere(QString name_obj){
     int column = list.last().toInt();
     Squere *s = this->findChild<Squere*>(name_obj);
     s->changeDescription(CLICKED,true);
+    Squere *sn = NULL;
+    if (column){
+        sn = this->findChild<Squere*>(QString("%1:%2").arg(row).arg(column-1));
+        if (sn->getDeskClicked()){
+            sn->changeDescription(RIGHT,true);
+            s->changeDescription(LEFT,true);
+        }
+    }
+    if (column<num_col-1){
+        sn = this->findChild<Squere*>(QString("%1:%2").arg(row).arg(column+1));
+        if (sn->getDeskClicked()){
+            sn->changeDescription(LEFT,true);
+            s->changeDescription(RIGHT,true);
+        }
+    }
+    if (row){
+        sn = this->findChild<Squere*>(QString("%1:%2").arg(row-1).arg(column));
+        if (sn->getDeskClicked()){
+            sn->changeDescription(BOTTOM,true);
+            s->changeDescription(TOP,true);
+        }
+    }
+    if (row<num_row-1){
+        sn = this->findChild<Squere*>(QString("%1:%2").arg(row+1).arg(column));
+        if (sn->getDeskClicked()){
+            sn->changeDescription(TOP,true);
+            s->changeDescription(BOTTOM,true);
+        }
+    }
+    repaint();
 }
