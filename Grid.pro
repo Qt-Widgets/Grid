@@ -31,3 +31,6 @@ HEADERS  += mainwindow.h \
     squere.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    SetupGrid_0.1.1_x86.exe
