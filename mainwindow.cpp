@@ -27,21 +27,33 @@ MainWindow::MainWindow(QWidget *parent) :
             connect(s,SIGNAL(clicked(QString)),SLOT(clickSquere(QString)));
         }
     }
+    history_list = new QStringList();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete history_list;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event){
+    if (event->key()==Qt::Key_Z&&event->modifiers()==Qt::ControlModifier){
+        if (history_list->isEmpty())return;
+        clickSquere(history_list->last());
+        history_list->removeLast();
+        history_list->removeLast();
+    }
 }
 
 
 void MainWindow::clickSquere(QString name_obj){
     QStringList list = name_obj.split(':');
+    history_list->append(name_obj);
     int row = list.first().toInt();
     int column = list.last().toInt();
     Squere *s = this->findChild<Squere*>(name_obj);
     s->changeDescription(CLICKED,true);
-    Squere *sn = NULL;
+    Squere *sn = NULL;    
     if (column){
         sn = this->findChild<Squere*>(QString("%1:%2").arg(row).arg(column-1));
         if (sn->getDeskClicked()){
