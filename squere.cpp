@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPainter>
+#include <QTimer>
 //#include <QDebug>
 
 Squere::Squere(QWidget *parent):QWidget(parent)
@@ -19,6 +20,9 @@ Squere::Squere(QWidget *parent):QWidget(parent)
     desc.left = true;
     desc.right = true;
     desc.clicked = false;
+    timer = new QTimer();
+    connect(timer, SIGNAL(timeout()),SLOT(timeOut()));
+    koeff = 0;
 }
 
 void Squere::paintEvent(QPaintEvent *event){
@@ -27,7 +31,10 @@ void Squere::paintEvent(QPaintEvent *event){
     painter.setRenderHint(QPainter::Antialiasing);
 
     QBrush brush(desc.clicked?Qt::green:Qt::gray, Qt::SolidPattern);
-    painter.fillRect(QRect(0,0,32,32),brush);
+    if (!koeff)
+        painter.fillRect(QRect(0,0,SIZE,SIZE),brush);
+    else
+        painter.fillRect(QRect(SIZE/2-SIZE*koeff/20,SIZE/2-SIZE*koeff/20,SIZE*koeff/10,SIZE*koeff/10),brush);
     painter.setPen(QPen(desc.top?Qt::black:Qt::green,0.5,Qt::SolidLine));
     painter.drawLine(QPoint(0,0),QPoint(SIZE,0));
     painter.setPen(QPen(desc.left?Qt::black:Qt::green,0.5,Qt::SolidLine));
@@ -50,6 +57,7 @@ void Squere::changeDescription(int pos, bool state){
     switch (pos) {
     case CLICKED:
         desc.clicked = !desc.clicked;
+        if (!timer->isActive())timer->start(15);
         break;
     case TOP:
         desc.top = !desc.top;
@@ -68,4 +76,19 @@ void Squere::changeDescription(int pos, bool state){
 
 bool Squere::getDeskClicked(){
     return desc.clicked;
+}
+
+
+void Squere::timeOut(){
+    if (desc.clicked){
+        if (++koeff==10) {
+            timer->stop();
+        }
+    }
+    else{
+        if (--koeff==0) {
+            timer->stop();
+        }
+    }
+    repaint();
 }

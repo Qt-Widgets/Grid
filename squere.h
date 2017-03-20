@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QMouseEvent>
-
+#include <QTimer>
 
 
 #define SIZE 32
@@ -30,6 +30,11 @@ private:
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *pe);
     struct Description desc;
+    QTimer *timer;
+    int koeff;
+
+private slots:
+    void timeOut();
 
 signals:
     void clicked(QString name_obj);
