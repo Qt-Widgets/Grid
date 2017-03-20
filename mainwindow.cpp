@@ -4,6 +4,7 @@
 #include "QScreen"
 #include "QHBoxLayout"
 #include "QLabel"
+#include "settings.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
     history_list = new QStringList();
+    connect(ui->actionSettings,SIGNAL(triggered()),SLOT(showSettings()));
 }
 
 MainWindow::~MainWindow()
@@ -83,4 +85,14 @@ void MainWindow::clickSquere(QString name_obj){
         }
     }
     repaint();
+}
+
+void MainWindow::showSettings(){
+    struct SETTINGS sett;
+    sett.border_width = 1;
+    sett.color_act = QColor(Qt::red);
+    sett.color_border = QColor(Qt::black);
+    sett.color_default = QColor(Qt::gray);
+    Settings *settings = new Settings(this,&sett);
+    settings->show();
 }

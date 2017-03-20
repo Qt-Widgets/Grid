@@ -25,12 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    squere.cpp
+    squere.cpp \
+    settings.cpp
 
 HEADERS  += mainwindow.h \
-    squere.h
+    squere.h \
+    settings.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    settings.ui
 
 DISTFILES += \
     SetupGrid_0.1.1_x86.exe

@@ -27,6 +27,7 @@ private:
 
 private slots:
     void clickSquere(QString name_obj);
+    void showSettings();
 };
 
 #endif // MAINWINDOW_H
