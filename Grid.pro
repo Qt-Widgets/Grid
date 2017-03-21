@@ -36,4 +36,4 @@ FORMS    += mainwindow.ui \
     settings.ui
 
 DISTFILES += \
-    SetupGrid_0.1.1_x86.exe
+    SetupGrid_0.2.5_x86.exe

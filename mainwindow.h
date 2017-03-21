@@ -35,6 +35,7 @@ private slots:
     void loadSettings();
     QString colorToString(QColor *color);
     QColor *stringToColor(QString string);
+    void makeFild();
 };
 
 #endif // MAINWINDOW_H

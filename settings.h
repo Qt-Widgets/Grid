@@ -12,6 +12,10 @@ struct SETTINGS{
     QColor color_act;
     QColor color_border;
     int border_width;
+    int fild_width;
+    int fild_height;
+    int squere_width;
+    int squere_height;
 };
 
 class Settings : public QDialog

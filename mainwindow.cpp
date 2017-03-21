@@ -12,19 +12,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     saved_settings("MyOwnCompany","Grid")
 {
-
     settings = new struct SETTINGS();
     loadSettings();
-
     ui->setupUi(this);
+    makeFild();
+    history_list = new QStringList();
+}
+
+MainWindow::~MainWindow()
+{
+    saveSettings();
+    delete ui;
+    delete history_list;
+}
+
+void MainWindow::makeFild(){
+    resize(10,10);
+    connect(ui->actionSettings,SIGNAL(triggered()),SLOT(showSettings()));
     lay = new QGridLayout();
     lay->setContentsMargins(0,0,0,0);
     lay->setSpacing(0);
     lay->setColumnMinimumWidth(0,SIZE);
     ui->centralWidget->setLayout(lay);
-    QRect n = QApplication::screens().first()->availableGeometry();
-    num_row = n.height()/SIZE;
-    num_col = n.width()/SIZE;
+    num_row = settings->fild_height;
+    num_col = settings->fild_width;
     for (int i = 0; i<num_row;i++){
         for (int j = 0; j<num_col; j++){
             Squere *s = new Squere(this,settings);
@@ -33,16 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
             connect(s,SIGNAL(clicked(QString)),SLOT(clickSquere(QString)));
         }
     }
-    history_list = new QStringList();
-    connect(ui->actionSettings,SIGNAL(triggered()),SLOT(showSettings()));
-
-}
-
-MainWindow::~MainWindow()
-{
-    saveSettings();
-    delete ui;
-    delete history_list;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
@@ -96,7 +97,7 @@ void MainWindow::clickSquere(QString name_obj){
 
 void MainWindow::showSettings(){
     Settings *settings = new Settings(this,this->settings);
-    settings->show();
+    settings->exec();
 }
 
 void MainWindow::saveSettings(){
@@ -105,6 +106,10 @@ void MainWindow::saveSettings(){
         saved_settings.setValue("/active_color",colorToString(&settings->color_act));
         saved_settings.setValue("/border_color",colorToString(&settings->color_border));
         saved_settings.setValue("/border_width",QString::number(settings->border_width));
+        saved_settings.setValue("/fild_width",QString::number(settings->fild_width));
+        saved_settings.setValue("/fild_height",QString::number(settings->fild_height));
+        saved_settings.setValue("/squere_width",QString::number(settings->squere_width));
+        saved_settings.setValue("/squere_height",QString::number(settings->squere_height));
     saved_settings.endGroup();
 }
 
@@ -114,6 +119,10 @@ void MainWindow::loadSettings(){
         settings->color_act = QColor(*stringToColor(saved_settings.value("/active_color","0:255:0").toString()));
         settings->color_border = QColor(*stringToColor(saved_settings.value("/border_color","0:0:0").toString()));
         settings->border_width = saved_settings.value("/border_width",1).toInt();
+        settings->fild_height = saved_settings.value("/fild_height",20).toInt();
+        settings->fild_width = saved_settings.value("/fild_width",20).toInt();
+        settings->squere_height = saved_settings.value("/squere_height",32).toInt();
+        settings->squere_width = saved_settings.value("/squere_width",32).toInt();
     saved_settings.endGroup();
 }
 

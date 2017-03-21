@@ -2,6 +2,7 @@
 #include "ui_settings.h"
 #include <QColor>
 #include <QColorDialog>
+#include <QMessageBox>
 
 Settings::Settings(QWidget *parent,struct SETTINGS *set) :
     QDialog(parent),
@@ -18,6 +19,10 @@ Settings::Settings(QWidget *parent,struct SETTINGS *set) :
     ui->default_color->setStyleSheet(QString("QLabel{background:rgb(%1,%2,%3)}").arg(sett.color_default.red()).arg(sett.color_default.green()).arg(sett.color_default.blue()));
     ui->active_color->setStyleSheet(QString("QLabel{background:rgb(%1,%2,%3)}").arg(sett.color_act.red()).arg(sett.color_act.green()).arg(sett.color_act.blue()));
     ui->border_width->setValue(sett.border_width);
+    ui->fild_width->setValue(sett.fild_width);
+    ui->fild_height->setValue(sett.fild_height);
+    ui->squere_height->setValue(sett.squere_height);
+    ui->squere_width->setValue(sett.squere_width);
 }
 
 Settings::~Settings()
@@ -47,8 +52,21 @@ void Settings::on_change_border_color_clicked()
 }
 
 void Settings::on_buttonBox_accepted()
-{
+{   if (sett.squere_height != ui->squere_height->value()||
+        sett.squere_width != ui->squere_width->value()  ||
+        sett.fild_height != ui->fild_height->value()    ||
+        sett.fild_width != ui->fild_width->value()    ){
+        QMessageBox error(QMessageBox::Information,
+                                             "Warning","You must restart program for apply changed settings",
+                                             QMessageBox::Ok,this);
+        error.exec();
+    }
+    sett.squere_height = ui->squere_height->value();
+    sett.squere_width = ui->squere_width->value();
+    sett.fild_height = ui->fild_height->value();
+    sett.fild_width = ui->fild_width->value();
     sett.border_width = ui->border_width->value();
     memcpy(reinterpret_cast<void*>(settings_parent),reinterpret_cast<void*>(&sett),sizeof (SETTINGS));
     parentWidget()->repaint();
+
 }
