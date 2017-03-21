@@ -9,13 +9,12 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    saved_settings("MyOwnCompany","Grid")
 {
+
     settings = new struct SETTINGS();
-    settings->border_width = 1;
-    settings->color_act = QColor(Qt::red);
-    settings->color_border = QColor(Qt::black);
-    settings->color_default = QColor(Qt::gray);
+    loadSettings();
 
     ui->setupUi(this);
     lay = new QGridLayout();
@@ -41,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    saveSettings();
     delete ui;
     delete history_list;
 }
@@ -95,7 +95,37 @@ void MainWindow::clickSquere(QString name_obj){
 }
 
 void MainWindow::showSettings(){
-
     Settings *settings = new Settings(this,this->settings);
     settings->show();
+}
+
+void MainWindow::saveSettings(){
+    saved_settings.beginGroup("/settings");
+        saved_settings.setValue("/default_color",colorToString(&settings->color_default));
+        saved_settings.setValue("/active_color",colorToString(&settings->color_act));
+        saved_settings.setValue("/border_color",colorToString(&settings->color_border));
+        saved_settings.setValue("/border_width",QString::number(settings->border_width));
+    saved_settings.endGroup();
+}
+
+void MainWindow::loadSettings(){
+    saved_settings.beginGroup("/settings");
+        settings->color_default = QColor(*stringToColor(saved_settings.value("/default_color","125:125:125").toString()));
+        settings->color_act = QColor(*stringToColor(saved_settings.value("/active_color","0:255:0").toString()));
+        settings->color_border = QColor(*stringToColor(saved_settings.value("/border_color","0:0:0").toString()));
+        settings->border_width = saved_settings.value("/border_width",1).toInt();
+    saved_settings.endGroup();
+}
+
+QColor* MainWindow::stringToColor(QString string){
+    QColor *color = new QColor();
+    QStringList list = string.split(':');
+    color->setRed(list.at(0).toInt());
+    color->setGreen(list.at(1).toInt());
+    color->setBlue(list.at(2).toInt());
+    return color;
+}
+
+QString MainWindow::colorToString(QColor *color){
+    return QString("%1:%2:%3").arg(color->red()).arg(color->green()).arg(color->blue());
 }

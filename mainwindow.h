@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "QGridLayout"
 #include <QKeyEvent>
+#include <QSettings>
 #include "settings.h"
 
 namespace Ui {
@@ -25,10 +26,15 @@ private:
     QStringList *history_list;
     struct SETTINGS *settings;
     void keyPressEvent(QKeyEvent * event);
+    QSettings saved_settings;
 
 private slots:
     void clickSquere(QString name_obj);
     void showSettings();
+    void saveSettings();
+    void loadSettings();
+    QString colorToString(QColor *color);
+    QColor *stringToColor(QString string);
 };
 
 #endif // MAINWINDOW_H
