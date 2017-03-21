@@ -6,7 +6,7 @@
 #include <QTimer>
 //#include <QDebug>
 
-Squere::Squere(QWidget *parent):QWidget(parent)
+Squere::Squere(QWidget *parent,struct SETTINGS *settings):QWidget(parent)
 {
     setFixedSize(SIZE,SIZE);
     QHBoxLayout *lay = new QHBoxLayout(this);
@@ -23,6 +23,7 @@ Squere::Squere(QWidget *parent):QWidget(parent)
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()),SLOT(timeOut()));
     koeff = 0;
+    this->settings = settings;
 }
 
 void Squere::paintEvent(QPaintEvent *event){
@@ -30,18 +31,18 @@ void Squere::paintEvent(QPaintEvent *event){
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QBrush brush(desc.clicked?Qt::green:Qt::gray, Qt::SolidPattern);
+    QBrush brush(desc.clicked?settings->color_act:settings->color_default, Qt::SolidPattern);
     if (!koeff)
         painter.fillRect(QRect(0,0,SIZE,SIZE),brush);
     else
         painter.fillRect(QRect(SIZE/2-SIZE*koeff/20,SIZE/2-SIZE*koeff/20,SIZE*koeff/10,SIZE*koeff/10),brush);
-    painter.setPen(QPen(desc.top?Qt::black:Qt::green,0.5,Qt::SolidLine));
+    painter.setPen(QPen(desc.top?settings->color_border:settings->color_act,0.5,Qt::SolidLine));
     painter.drawLine(QPoint(0,0),QPoint(SIZE,0));
-    painter.setPen(QPen(desc.left?Qt::black:Qt::green,0.5,Qt::SolidLine));
+    painter.setPen(QPen(desc.left?settings->color_border:settings->color_act,0.5,Qt::SolidLine));
     painter.drawLine(QPoint(0,0),QPoint(0,SIZE));
-    painter.setPen(QPen(desc.bottom?Qt::black:Qt::green,0.5,Qt::SolidLine));
+    painter.setPen(QPen(desc.bottom?settings->color_border:settings->color_act,0.5,Qt::SolidLine));
     painter.drawLine(QPoint(0,SIZE),QPoint(SIZE,SIZE));
-    painter.setPen(QPen(desc.right?Qt::black:Qt::green,0.5,Qt::SolidLine));
+    painter.setPen(QPen(desc.right?settings->color_border:settings->color_act,0.5,Qt::SolidLine));
     painter.drawLine(QPoint(SIZE,0),QPoint(SIZE,SIZE));
 }
 

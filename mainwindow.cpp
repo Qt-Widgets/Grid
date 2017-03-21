@@ -4,13 +4,19 @@
 #include "QScreen"
 #include "QHBoxLayout"
 #include "QLabel"
-#include "settings.h"
+
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    settings = new struct SETTINGS();
+    settings->border_width = 1;
+    settings->color_act = QColor(Qt::red);
+    settings->color_border = QColor(Qt::black);
+    settings->color_default = QColor(Qt::gray);
+
     ui->setupUi(this);
     lay = new QGridLayout();
     lay->setContentsMargins(0,0,0,0);
@@ -22,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     num_col = n.width()/SIZE;
     for (int i = 0; i<num_row;i++){
         for (int j = 0; j<num_col; j++){
-            Squere *s = new Squere(this);
+            Squere *s = new Squere(this,settings);
             s->setObjectName(QString("%1:%2").arg(i).arg(j));
             lay->addWidget(s,i,j,1,1,Qt::AlignCenter);
             connect(s,SIGNAL(clicked(QString)),SLOT(clickSquere(QString)));
@@ -30,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     history_list = new QStringList();
     connect(ui->actionSettings,SIGNAL(triggered()),SLOT(showSettings()));
+
 }
 
 MainWindow::~MainWindow()
@@ -88,11 +95,7 @@ void MainWindow::clickSquere(QString name_obj){
 }
 
 void MainWindow::showSettings(){
-    struct SETTINGS sett;
-    sett.border_width = 1;
-    sett.color_act = QColor(Qt::red);
-    sett.color_border = QColor(Qt::black);
-    sett.color_default = QColor(Qt::gray);
-    Settings *settings = new Settings(this,&sett);
+
+    Settings *settings = new Settings(this,this->settings);
     settings->show();
 }

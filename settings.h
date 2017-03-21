@@ -27,6 +27,8 @@ private slots:
     void on_change_act_color_clicked();
     void on_change_border_color_clicked();
 
+    void on_buttonBox_accepted();
+
 private:
     Ui::Settings *ui;
     struct SETTINGS sett;

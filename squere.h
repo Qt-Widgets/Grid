@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QTimer>
+#include <settings.h>
 
 
 #define SIZE 32
@@ -22,7 +23,7 @@ class Squere : public QWidget
 {
     Q_OBJECT
 public:
-    Squere(QWidget *parent = 0);
+    Squere(QWidget *parent = 0,struct SETTINGS *settings = NULL);
     void changeDescription(int pos, bool state);
     bool getDeskClicked();
 
@@ -32,6 +33,7 @@ private:
     struct Description desc;
     QTimer *timer;
     int koeff;
+    struct SETTINGS *settings;
 
 private slots:
     void timeOut();

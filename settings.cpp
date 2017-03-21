@@ -44,3 +44,9 @@ void Settings::on_change_border_color_clicked()
     if (color.isValid())sett.color_border = color;
     ui->border_color->setStyleSheet(QString("QLabel{background:rgb(%1,%2,%3)}").arg(sett.color_border.red()).arg(sett.color_border.green()).arg(sett.color_border.blue()));
 }
+
+void Settings::on_buttonBox_accepted()
+{
+    memcpy(reinterpret_cast<void*>(settings_parent),reinterpret_cast<void*>(&sett),sizeof (SETTINGS));
+    parentWidget()->repaint();
+}

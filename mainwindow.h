@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "QGridLayout"
 #include <QKeyEvent>
+#include "settings.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,7 +23,7 @@ private:
     QGridLayout *lay;
     int num_row, num_col;
     QStringList *history_list;
-
+    struct SETTINGS *settings;
     void keyPressEvent(QKeyEvent * event);
 
 private slots:
